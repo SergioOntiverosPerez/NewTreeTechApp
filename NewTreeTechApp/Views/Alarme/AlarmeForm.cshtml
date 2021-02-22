@@ -1,0 +1,37 @@
+﻿@model NewTreeTechApp.ViewModels.AlarmeViewModel
+@{
+    ViewBag.Title = "@Model.Title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Title</h2>
+
+@using (Html.BeginForm("Save", "Alarme"))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Descricao)
+        @Html.TextBoxFor(m => m.Descricao, new { @class = "form-control", @placeholder = "Entre a descrição do alarme" })
+        @Html.ValidationMessageFor(m => m.Descricao)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Classificacao)
+        <select asp-for="@Model.Classificacao" asp-items="Html.GetEnumSelectList<ClassificacoAlarme>()" class="form-control">
+            <option selected="selected" value="">Selecione a classificação do Alarme</option>
+        </select>
+        <span asp-validation-for="@Model.Classificacao" class="text-danger" />
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.DataDeCadastro)
+        @Html.TextBoxFor(m => m.DataDeCadastro, "{0:d MMM yyyy}", new { @class = "form-control", @placeholder = "Ex: 01 Jan 2021" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.EquipamentoId)
+        @Html.DropDownListFor(m => m.EquipamentoId, new SelectList(Model.Equipamentos, "Id", "NomeDoEquipamento"), "Selecione o Equipamento", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.EquipamentoId)
+    </div>
+
+    @Html.HiddenFor(m => m.Id)
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a asp-action="List" class="btn btn-info">Voltar</a>
+}

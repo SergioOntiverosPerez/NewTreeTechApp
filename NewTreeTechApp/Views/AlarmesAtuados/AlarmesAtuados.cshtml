@@ -1,0 +1,79 @@
+﻿@model IEnumerable<NewTreeTechApp.Models.AlarmeAtuado>
+
+@{
+    ViewBag.Title = "Alarmes Atuados";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<form asp-controller="AlarmesAtuados" asp-action="Search">
+    <p>
+        Descrição do Alarme: <input type="text" name="searchString"/>
+            <input type="submit" value="Filtrar"/>
+    </p>
+</form>
+
+
+<table id="alarmesAtuados" class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">
+                @Html.DisplayNameFor(m => m.DataDeEntrada)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(m => m.DataDeSaida)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(m => m.StatusAlarme)
+            </th>
+            <th scope="col">
+                @Html.DisplayName("Descrição do Alarme")
+            </th>
+            <th scope="col">
+                @Html.DisplayName("Descrição do Equipamento")
+            </th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var alarme in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(m => alarme.DataDeEntrada)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => alarme.DataDeSaida)
+                </td>
+                <td>
+                    @if (alarme.StatusAlarme == 0)
+                    {
+                        <p>Off</p>
+                    }
+                    else
+                    {
+                        <p>On</p>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(m => alarme.Alarme.Descricao)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => alarme.Alarme.Equipamento.NomeDoEquipamento)
+                    @Html.DisplayFor(m => alarme.Alarme.Equipamento.NumeroDeSerie)
+                </td>
+                <td>
+                    @if (alarme.StatusAlarme == 0)
+                    {
+                        <a asp-action="Ativar" asp-route-id="@alarme.Id" class="btn btn-warning">Ativar</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Desativar" asp-route-id="@alarme.Id" class="btn btn-success">Desativar</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
